@@ -44,6 +44,48 @@ class Player():
 
 
 class Game():
+    """
+    A class to represent the Perudo game.
+    Attributes:
+        debug (bool): Flag to enable or disable debug mode.
+        n_players (int): Total number of players in the game.
+        n_alive (int): Number of players still alive in the game.
+        n_humans (int): Number of human players in the game.
+        players (list): List of Player objects representing all players.
+        playing_player (int): Index of the player whose turn it is.
+        current_bid (str): The current bid in the game.
+        previous_bid (str): The previous bid in the game.
+        current_possible_bids (list): List of possible bids for the current turn.
+        bid_history (list): History of all bids made in the current round.
+        tot_dices (int): Total number of dice currently in play.
+    Methods:
+        __init__(n_players=2, n_humans=1, n_dices=5, debug=False):
+            Initializes the game with the specified number of players, humans, and dice.
+        play():
+            Starts and manages the game loop until there is one player left.
+        play_turn():
+            Executes the current player's turn, including bidding or daring.
+        human_bid():
+            Handles the input and validation of a human player's bid.
+        ai_bid():
+            Handles the AI logic for making a bid.
+        dare():
+            Resolves the outcome of a dare and updates the game state.
+        is_last_bid_correct():
+            Checks if the last bid made is correct based on the dice rolls.
+        possible_bids():
+            Calculates and updates the list of possible bids for the current turn.
+        whos_alive():
+            Returns a list of indices of players who are still alive.
+        roll_dices():
+            Rolls the dice for all players who are still alive.
+        next_player():
+            Determines the index of the next player who is still alive.
+        previous_player():
+            Determines the index of the previous player who is still alive.
+        count_dices():
+            Counts the total number of dice currently in play.
+    """
 
     def __init__(self, n_players=2, n_humans=1, n_dices=5, debug=False):
         self.debug = debug
