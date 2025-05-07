@@ -74,8 +74,8 @@ class Game():
         # print("==================================")
         while self.n_alive > 1:
             # Roll dices for all players
-            self.roll_dices()
             self.count_dices()
+            self.roll_dices()
 
             if self.debug:
                 for i in range(self.n_players):
@@ -201,6 +201,7 @@ class Game():
                 if min_num <= self.tot_dices:
                     for j in range(2, 7):
                         bids.append(f"{min_num}-{j}")
+                        
             else:
                 min_lama = int(np.floor(num_dices / 2 + 1))
                 dice_face = int(dice_face)
@@ -242,4 +243,4 @@ class Game():
             current_player = next_player
 
     def count_dices(self):
-        self.tot_dices = np.sum([k.n_dices for k in self.players])
+        self.tot_dices = np.sum([k.n_dices for k in self.players if k.alive])
