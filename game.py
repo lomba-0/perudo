@@ -15,11 +15,11 @@ class Dice():
             return 1
         return 0
     
-    def disp(self):
+    def disp_value(self):
         if self.value == 1:
-            print("L")
+            return "L"
         else:
-            print(self.value)
+            return str(self.value)
 
 class Player():
     def __init__(self, id, n_dices = 5, is_ai=True):
@@ -79,10 +79,10 @@ class Game():
 
             if self.debug:
                 for i in range(self.n_players):
-                    print("Player ", i, " dices: ", [k.value for k in self.players[i].dices])
+                    print("Player ", i, " dices: ", [k.disp_value() for k in self.players[i].dices])
             else:
                 for i in range(self.n_humans):
-                    print("Player ", i, " dices: ", [k.value for k in self.players[i].dices])
+                    print("Player ", i, " dices: ", [k.disp_value() for k in self.players[i].dices])
             print("==================================")
             # Start the bidding phase
             while True:
@@ -110,7 +110,7 @@ class Game():
             self.current_bid = None
             self.previous_bid = None
             self.current_possible_bids = []
-
+            print("+++++++++++ NEW ROUND +++++++++++")
 
             if self.debug:
                 print("Alive players: ", self.whos_alive())
@@ -131,6 +131,7 @@ class Game():
             self.human_bid()
 
         if self.current_bid == "D":
+            print(f"Player {self.playing_player} dares")
             self.dare()
         else:
             self.bid_history.append(self.current_bid)

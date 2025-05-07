@@ -7,7 +7,6 @@ def main():
     # print("Player 1 dices: ", [k.value for k in p.dices])
     
     debug = False
-    
 
     game = Game(n_players=2, n_humans=1, n_dices=5, debug=debug)
     game.play()
