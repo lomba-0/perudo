@@ -49,7 +49,7 @@ To run the game, you can use the `test_game.py` file. Follow these steps:
 
 2. Run the `test_game.py` script using Python:
    ```bash
-   python3 test_game.py
+   python test_game.py
    ```
 
 3. Follow the on-screen instructions to play the game.
