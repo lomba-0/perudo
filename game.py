@@ -1,5 +1,4 @@
 import random
-import re
 import numpy as np
 
 class Dice():
