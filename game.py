@@ -152,6 +152,7 @@ class Game():
             self.previous_bid = None
             self.current_possible_bids = []
             print("+++++++++++ NEW ROUND +++++++++++")
+            input("Press Enter to roll the dices...")
 
             if self.debug:
                 print("Alive players: ", self.whos_alive())
@@ -224,8 +225,9 @@ class Game():
         bids = []
 
         if self.current_bid is None:
+            min_bid = max(int(np.floor(self.tot_dices / 3)-1), 1)
             for j in range(2, 7):
-                bids.append(f"1-{j}")
+                bids.append(f"{min_bid}-{j}")
 
         else:
 
