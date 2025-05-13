@@ -1,7 +1,6 @@
 import random
 import numpy as np
 
-from advanced_players import ProbabilityPlayer
 
 class Dice():
     def __init__(self):

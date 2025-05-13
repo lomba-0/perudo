@@ -1,14 +1,17 @@
-from game import *
-
+from game import Game, HumanPlayer
+from advanced_players import ProbabilityPlayer
 
 def main():
     # p = Player(1)
     # p.roll_dices()
     # print("Player 1 dices: ", [k.value for k in p.dices])
     
-    debug = False
+    debug = True
 
-    game = Game(n_players=2, n_humans=1, n_dices=5, debug=debug)
+    p_0 = HumanPlayer(id=0)
+    p_1 = ProbabilityPlayer(id=1)
+    players = [p_0, p_1]
+    game = Game(players=players, debug=debug)
     game.play()
 
 
