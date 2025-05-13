@@ -1,5 +1,6 @@
 from game import Player
 import math
+import random
     
 
 class ProbabilityPlayer(Player):
@@ -16,6 +17,7 @@ class ProbabilityPlayer(Player):
         probabilities = [] 
         for pb in possible_bids:
 
+            prob = 0
             if pb == "D":
                 bid = bid_history[-1]
                 num = int(bid.split('-')[0])
@@ -24,38 +26,44 @@ class ProbabilityPlayer(Player):
                 remaining_num = num - my_num
                 remaining_tot = tot_dices - self.n_dices
 
-                prob = 0
-                for i in range(remaining_num, remaining_tot + 1):
-                    if face == "L":
-                        prob += math.comb(remaining_tot, i) * ((1/6) ** i) * ((5/6) ** (remaining_tot - i))
-                    else:
-                        prob += math.comb(remaining_tot, i) * ((1/3) ** i) * ((2/3) ** (remaining_tot - i))
-
-                probabilities.append(float(round(1-prob,3)))
-
                 
-            else:
-                num = int(pb.split('-')[0])
-                face = pb.split('-')[1]
-                my_num = self.count(face)
-                remaining_num = num - my_num
-                remaining_tot = tot_dices - self.n_dices
-
-                prob = 0
                 for i in range(remaining_num):
                     if face == "L":
                         prob += math.comb(remaining_tot, i) * ((1/6) ** i) * ((5/6) ** (remaining_tot - i))
                     else:
                         prob += math.comb(remaining_tot, i) * ((1/3) ** i) * ((2/3) ** (remaining_tot - i))
+                
+            else:
+                num = int(pb.split('-')[0])
+                face = pb.split('-')[1]
+                my_num = self.count(face)
 
-                probabilities.append(float(round(prob,3)))
+                remaining_num = num - my_num
+                remaining_tot = tot_dices - self.n_dices
 
-        # if debug:
-        # print(f"Possible bids: {possible_bids}")
+                # if debug:
+                #     print(f"Player {self.id} - Remaining dices: {remaining_tot}, Remaining num: {remaining_num}, Face: {face}")
+
+                if remaining_num <= 0:
+                    prob = 1
+                else:
+                    prob = 0
+                    for i in range(remaining_num, remaining_tot + 1):
+                        if face == "L":
+                            prob += math.comb(remaining_tot, i) * ((1/6) ** i) * ((5/6) ** (remaining_tot - i))
+                        else:
+                            prob += math.comb(remaining_tot, i) * ((1/3) ** i) * ((2/3) ** (remaining_tot - i))
+
+                        # if debug:
+                        #     print(f"N dices: {i} - Prob: {prob}, Remaining dices: {remaining_tot}, Remaining num: {remaining_num}, Face: {face}")
+
+            probabilities.append(float(round(prob,3)))
+
         print(f"Probabilities: {probabilities}")
             
         # Choose the bid with the highest probability
         max_prob = max(probabilities)
-        max_prob_index = probabilities.index(max_prob)
+        max_prob_indices = [i for i, prob in enumerate(probabilities) if prob == max_prob]
+        max_prob_index = random.choice(max_prob_indices)
+        
         return possible_bids[max_prob_index]
-            

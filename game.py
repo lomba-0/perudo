@@ -34,6 +34,11 @@ class Player():
         return self.dices
 
     def count(self, value):
+        if value == "L":
+            value = 1
+        else:
+            value = int(value)
+
         return np.sum([k.count(value) for k in self.dices])
     
     def loses(self):
@@ -153,13 +158,13 @@ class Game():
                 if self.current_bid == "D":
                     break
 
-                # if self.debug:
+                if self.debug:
                 #     print("Current player: ", self.playing_player)
                 #     print("Next player: ", self.next_player())
                 #     print("Previous player: ", self.previous_player())
                 #     print("Current bid: ", self.current_bid)
                 #     print("Previous bid: ", self.previous_bid)
-                #     print("Bid history: ", self.bid_history)
+                    print("Bid history: ", self.bid_history)
 
                 self.playing_player = self.next_player()
 
