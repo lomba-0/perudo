@@ -1,6 +1,7 @@
 import random
 import numpy as np
-from advanced_players import *
+
+from advanced_players import ProbabilityPlayer
 
 class Dice():
     def __init__(self):
@@ -42,7 +43,7 @@ class Player():
             self.alive = False
             print(f"Player {self.id} is out of the game")
 
-    def bid(self, possible_bids, bid_history):
+    def bid(self, possible_bids, **kwargs):
         return random.choice(possible_bids)
         
 
@@ -51,7 +52,7 @@ class HumanPlayer(Player):
         super().__init__(id, n_dices)
         self.is_ai = False
 
-    def bid(self, possible_bids, bid_history):
+    def bid(self, possible_bids, **kwargs):
         while True:
             bid = input("Enter your bid: ")
             if bid in possible_bids:
@@ -104,13 +105,18 @@ class Game():
             Counts the total number of dice currently in play.
     """
 
-    def __init__(self, n_players=2, n_humans=1, n_dices=5, debug=False):
+    def __init__(self, n_players=2, n_humans=1, n_dices=5, debug=False, players=None):
         self.debug = debug
         self.n_players = n_players
         self.n_alive = n_players
         self.n_humans = n_humans
         
-        self.players = [HumanPlayer(id = i, n_dices = n_dices) for i in range(n_humans)] + [Player(id = i, n_dices = n_dices) for i in range(n_humans, n_players)]
+        if players is not None:
+            self.players = players
+            self.n_players = len(players)
+            self.n_humans = len([k for k in players if k.is_ai == False])
+        else:
+            self.players = [HumanPlayer(id = i, n_dices = n_dices) for i in range(n_humans)] + [Player(id = i, n_dices = n_dices) for i in range(n_humans, n_players)]
         
         self.count_dices()
 
@@ -143,18 +149,18 @@ class Game():
             # Start the bidding phase
             while True:
                 print("Player ", self.playing_player, " turn")
-                self.play_turn()
+                self.play_turn(debug=self.debug)
 
                 if self.current_bid == "D":
                     break
 
-                if self.debug:
-                    print("Current player: ", self.playing_player)
-                    print("Next player: ", self.next_player())
-                    print("Previous player: ", self.previous_player())
-                    print("Current bid: ", self.current_bid)
-                    print("Previous bid: ", self.previous_bid)
-                    print("Bid history: ", self.bid_history)
+                # if self.debug:
+                #     print("Current player: ", self.playing_player)
+                #     print("Next player: ", self.next_player())
+                #     print("Previous player: ", self.previous_player())
+                #     print("Current bid: ", self.current_bid)
+                #     print("Previous bid: ", self.previous_bid)
+                #     print("Bid history: ", self.bid_history)
 
                 self.playing_player = self.next_player()
 
@@ -163,8 +169,9 @@ class Game():
             self.current_bid = None
             self.previous_bid = None
             self.current_possible_bids = []
-            print("+++++++++++ NEW ROUND +++++++++++")
-            input("Press Enter to roll the dices...")
+            if self.n_alive > 1:
+                print("+++++++++++ NEW ROUND +++++++++++")
+                input("Press Enter to roll the dices...")
 
             if self.debug:
                 print("Alive players: ", self.whos_alive())
@@ -174,17 +181,13 @@ class Game():
         print("Player ", self.whos_alive()[0], " wins")
         print("==================================")
 
-    def play_turn(self):
+    def play_turn(self,debug=False):
 
         self.previous_bid = self.current_bid
         possible_bids = self.possible_bids()
 
-        self.current_bid = self.players[self.playing_player].bid(possible_bids, self.bid_history)
+        self.current_bid = self.players[self.playing_player].bid(possible_bids = possible_bids, bid_history = self.bid_history, tot_dices = self.tot_dices, debug=debug)
 
-        # if self.players[self.playing_player].is_ai:
-        #     self.ai_bid()
-        # else:
-        #     self.human_bid()
 
         if self.current_bid == "D":
             print(f"Player {self.playing_player} dares")
